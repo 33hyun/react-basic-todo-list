@@ -59,7 +59,9 @@ const Todolist = () => {
             <button onClick={() => handleUpdate(todo.id)}>
               {todo.completed ? "완료" : "미완료"}
             </button>
-            <button onClick={() => handleDelete(todo.id)}>삭제</button>
+            <button onClick={() => handleDelete(todo.id)}>
+              {todo.completed ? "삭제" : "완료"}
+            </button>
           </li>
         ))}
       </ul>
