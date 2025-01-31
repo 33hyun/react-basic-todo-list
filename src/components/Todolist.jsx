@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 const SAMPLE_TODOS = [
   { id: 1, text: "Buy milk", completed: false },
   { id: 2, text: "Clean the house", completed: false },
