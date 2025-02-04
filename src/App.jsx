@@ -1,13 +1,12 @@
-import Todolist from "./components/Todolist";
+import TodoContainer from "./components/TodoContainer";
 
-const App = () => {
-
-
+function App() {
   return (
-    <main className="main-center">
-      <Todolist />
-    </main>
+    <div>
+      <h1>📌 Todo List</h1>
+      <TodoContainer />
+    </div>
   );
-};
+}
 
 export default App;
