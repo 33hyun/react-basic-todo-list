@@ -10,9 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "lucide-react": "^0.474.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "styled-component": "^2.8.0",
+    "the-new-css-reset": "^1.11.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

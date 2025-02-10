@@ -1,12 +1,12 @@
-import TodoContainer from "./components/TodoContainer";
+import RootLayout from "./components/layout/RootLayout.jsx";
+import TodoContainer from "./components/todo/TodoContainer";
 
-function App() {
+const App = () => {
   return (
-    <div>
-      <h1>📌 Todo List</h1>
+    <RootLayout>
       <TodoContainer />
-    </div>
+    </RootLayout>
   );
-}
+};
 
 export default App;
