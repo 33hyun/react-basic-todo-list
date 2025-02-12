@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { ActionButton } from "./TodoItem";
+import { TodoContext } from "../../../context/TodoContext";
 
-const TodoForm = ({ addTodos }) => {
+const TodoForm = () => {
+  const { addTodos } = useContext(TodoContext);
+
   const [todoText, setTodoText] = useState("");
 
   const handleSubmit = (e) => {
+    // 새로고침 막아주기
     e.preventDefault();
 
     if (!todoText.trim()) {
@@ -18,6 +21,7 @@ const TodoForm = ({ addTodos }) => {
     setTodoText("");
   };
 
+  // input 창의 입력값을 가져오는 함수
   const handleChangeTodoText = (e) => {
     setTodoText(e.target.value);
   };
@@ -67,8 +71,5 @@ const SubmitButton = styled(ActionButton)`
   flex: 1;
   text-align: center;
 `;
-TodoForm.propTypes = {
-  addTodos: PropTypes.func.isRequired,
-};
 
 export default TodoForm;

@@ -1,7 +1,11 @@
+import { useContext } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
-import PropTypes from 'prop-types';
+import { TodoContext } from "../../../context/TodoContext";
 
-const TodoItem = ({ id, text, completed, toggleTodoCompleted, deleteTodo }) => {
+const TodoItem = ({ id, text, completed }) => {
+  const { toggleTodoCompleted, deleteTodo } = useContext(TodoContext);
+
   return (
     <TodoItemWrapper>
       <TodoItemText $completed={completed}> {text} </TodoItemText>
@@ -62,11 +66,9 @@ export const ActionButton = styled.button`
   }
 `;
 TodoItem.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   completed: PropTypes.bool.isRequired,
-  toggleTodoCompleted: PropTypes.func.isRequired,
-  deleteTodo: PropTypes.func.isRequired,
 };
 
 export default TodoItem;

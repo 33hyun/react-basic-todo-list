@@ -1,21 +1,17 @@
 import styled from "styled-components";
-import PropTypes from 'prop-types';
 import TodoItem from "./TodoItem";
+import { useContext } from "react";
+import { TodoContext } from "../../../context/TodoContext";
 
-const TodoList = ({ todos, toggleTodoCompleted, deleteTodo }) => {
+const TodoList = () => {
+  const { todos } = useContext(TodoContext);
+
   return (
     <TodoListSection>
       <TodoListHeader>Tasks</TodoListHeader>
       <TodoListContent>
         {todos.map(({ id, text, completed }) => (
-          <TodoItem
-            key={id}
-            toggleTodoCompleted={toggleTodoCompleted}
-            deleteTodo={deleteTodo}
-            text={text}
-            completed={completed}
-            id={id}
-          />
+          <TodoItem key={id} text={text} completed={completed} id={id} />
         ))}
       </TodoListContent>
     </TodoListSection>
@@ -37,16 +33,5 @@ const TodoListContent = styled.ul`
   flex-direction: column;
   gap: 1rem;
 `;
-TodoList.propTypes = {
-  todos: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      text: PropTypes.string.isRequired,
-      completed: PropTypes.bool.isRequired,
-    })
-  ).isRequired,
-  toggleTodoCompleted: PropTypes.func.isRequired,
-  deleteTodo: PropTypes.func.isRequired,
-};
 
 export default TodoList;

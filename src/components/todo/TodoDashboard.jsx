@@ -1,8 +1,15 @@
 import { FileCheck, LaptopMinimal, Video } from "lucide-react";
+import { useContext } from "react";
 import styled from "styled-components";
-import PropTypes from 'prop-types';
+import { TodoContext } from "../../../context/TodoContext";
 
-const TodoDashboard = ({ all = 0, completed = 0, pending = 0 }) => {
+const TodoDashboard = () => {
+  const { todos } = useContext(TodoContext);
+
+  const all = todos.length;
+  const completed = todos.filter((todo) => todo.completed).length;
+  const pending = all - completed;
+
   return (
     <TodoDashboardSection>
       <TodoDashboardHeader>Quick Access</TodoDashboardHeader>
@@ -87,10 +94,5 @@ const TodoDashboardCardContent = styled.p`
     font-weight: 400;
   }
 `;
-TodoDashboard.propTypes = {
-  all: PropTypes.number,
-  completed: PropTypes.number,
-  pending: PropTypes.number,
-};
 
 export default TodoDashboard;
