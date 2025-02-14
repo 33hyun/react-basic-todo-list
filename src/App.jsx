@@ -1,15 +1,22 @@
-import RootLayout from "./components/layout/RootLayout";
-import TodoProvider from "./components/provider/TodoProvider";
-import TodoContainer from "./components/todo/TodoContainer";
+import RootLayout from "./layout/RootLayout";
+import HomePage from "./pages/HomePage";
+import { BrowserRouter, Route, Routes } from "react-router";
+import TodoDetailPage from "./pages/TodoDetailPage";
+import TodoProvider from "./provider/TodoProvider";
 
-const App = () => {
+const TodoListInit = () => {
   return (
     <TodoProvider>
-      <RootLayout>
-        <TodoContainer />
-      </RootLayout>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<RootLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="todos/:id" element={<TodoDetailPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </TodoProvider>
   );
 };
 
-export default App;
+export default TodoListInit;
