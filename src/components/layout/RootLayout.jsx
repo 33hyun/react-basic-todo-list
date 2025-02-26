@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import PropTypes from 'prop-types';
 import { Outlet } from "react-router";
+import styled from "styled-components";
 
+// Compositional Layout
 const RootLayout = () => {
   return (
     <MainContainer>
@@ -20,10 +20,7 @@ const MainContainer = styled.main`
 const MainContent = styled.div`
   max-width: 768px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 2rem;
 `;
-RootLayout.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 export default RootLayout;
