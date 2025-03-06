@@ -3,7 +3,7 @@
     {
       "id": "2",
       "text": "Clean the house",
-      "completed": false
+      "completed": true
     },
     {
       "id": "3",
@@ -13,11 +13,6 @@
     {
       "id": "4",
       "text": "Finish homework",
-      "completed": false
-    },
-    {
-      "id": "5",
-      "text": "Call mom",
       "completed": false
     },
     {
