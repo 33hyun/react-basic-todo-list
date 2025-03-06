@@ -1,20 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import { ActionButton } from "./TodoItem";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAddTodoMutation } from "../../hooks/useTodoQuery";
 
 const TodoForm = () => {
-  const queryClient = useQueryClient();
-  const { mutate: addTodoMutate } = useMutation({
-    // mutationFn: addTodos,
-    onSettled: () => {
-      return queryClient.invalidateQueries(["todos"]);
-    },
-  });
+  const { mutate: addTodoMutate } = useAddTodoMutation();
 
   const [todoText, setTodoText] = useState("");
   const inputRef = useRef(null);
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -27,7 +18,6 @@ const TodoForm = () => {
     setTodoText("");
   };
 
-  // input 창의 입력값을 가져오는 함수
   const handleChangeTodoText = (e) => {
     setTodoText(e.target.value);
   };
@@ -37,50 +27,23 @@ const TodoForm = () => {
   }, []);
 
   return (
-    <TodoFormWrapper onSubmit={handleSubmit}>
-      <TodoFormInput
+    <form onSubmit={handleSubmit} className="flex flex-row flex-wrap gap-2">
+      <input
         type="text"
         value={todoText}
         onChange={handleChangeTodoText}
-        placeholder="일정을 입력하세요"
+        placeholder="할 일을 입력하세요"
         ref={inputRef}
+        className="flex-[8] p-2 text-base border border-gray-300 rounded-lg bg-white placeholder-gray-400 focus:border-[#582be6] focus:outline-none"
       />
-      <SubmitButton type="submit" $bgColor="#582be6">
+      <button
+        type="submit"
+        className="flex-1 text-center px-4 py-2 text-white rounded-lg bg-[#582be6] bover:bg=[#4422b5] transition-colors"
+      >
         제출하기
-      </SubmitButton>
-    </TodoFormWrapper>
+      </button>
+    </form>
   );
 };
-
-const TodoFormWrapper = styled.form`
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-`;
-
-const TodoFormInput = styled.input`
-  padding: 0.5rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  background-color: white;
-
-  flex: 6;
-
-  &::placeholder {
-    color: #aaa;
-  }
-
-  &:focus {
-    border-color: #582be6;
-    outline: none;
-  }
-`;
-
-const SubmitButton = styled(ActionButton)`
-  flex: 1;
-  text-align: center;
-`;
 
 export default TodoForm;

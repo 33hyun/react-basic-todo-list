@@ -1,82 +1,49 @@
-import styled from "styled-components";
-import PropTypes from 'prop-types';
-import { Link } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteTodo, toggleTodoCompleted } from "../api/todo-api";
+import { Link, useNavigate } from "react-router";
+import {
+  useDeleteTodoMutation,
+  useToggleTodoMutation
+} from "../../hooks/useTodoQuery";
 
-const TodoItem = ({ id, text, completed }) => {
-  const queryClient = useQueryClient();
+const TodoItem = ({ completed, text, id }) => {
+  const navigate = useNavigate();
 
-  // ✅ 완료/취소 상태 변경 Mutation
-  const { mutate: toggleTodoMutate } = useMutation({
-    mutationFn: () => toggleTodoCompleted(id, completed),
-    onSuccess: () => queryClient.invalidateQueries(["todos"]),
-  });
+  const { mutate: toggleTodoMutate } = useToggleTodoMutation();
+  const { mutate: deleteTodoMutate } = useDeleteTodoMutation();
 
-  // ✅ 삭제 Mutation
-  const { mutate: deleteTodoMutate } = useMutation({
-    mutationFn: () => deleteTodo(id),
-    onSuccess: () => queryClient.invalidateQueries(["todos"]),
-  });
+  const navigateAfterDelete = (id) => {
+    deleteTodoMutate(id);
+
+    navigate("/");
+  };
 
   return (
-    <TodoItemWrapper>
-      <TodoItemLink to={`/todos/${id}`} $completed={completed}>
+    <li className="flex flex-row flex-wrap justify-between items-center gap-4 bg-white p-5 rounded-2xl shadow-md">
+      <Link
+        to={`/todos/${id}`}
+        className={`hover:underline ${completed ? " line-through" : ""}`}
+      >
         {text}
-      </TodoItemLink>
-      <TodoItemActions>
-        <ActionButton onClick={toggleTodoMutate} $bgColor={completed ? "#242424" : "#582be6"}>
+      </Link>
+
+      <div className="flex flex-row flex-wrap gap-2">
+        <button
+          onClick={() => toggleTodoMutate({ id, completed })}
+          className={`${
+            completed ? "bg-[#242424]" : "bg-[#582be6]"
+          } text-white px-4 py-2 rounded-lg hover:opacity-80 whitespace-nowrap text-center`}
+        >
           {completed ? "취소하기" : "완료하기"}
-        </ActionButton>
-        <ActionButton onClick={deleteTodoMutate} $bgColor="#e6582b">
+        </button>
+
+        <button
+          onClick={() => navigateAfterDelete(id)}
+          className="bg-[#ff4033] text-white px-4 py-2 rounded-lg hover:opacity-80 whitespace-nowrap text-center"
+        >
           삭제하기
-        </ActionButton>
-      </TodoItemActions>
-    </TodoItemWrapper>
+        </button>
+      </div>
+    </li>
   );
-};
-
-export const ActionButton = styled.button`
-  background-color: ${(props) => props.$bgColor};
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  text-align: center;
-
-  &:hover {
-    opacity: 0.8;
-  }
-`;
-
-const TodoItemWrapper = styled.li`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  background-color: white;
-  padding: 1.25rem;
-  border-radius: 1rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-`;
-
-const TodoItemLink = styled(Link)`
-  text-decoration: ${({ $completed }) => ($completed ? "line-through" : "none")};
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const TodoItemActions = styled.div`
-  display: flex;
-  gap: 1rem;
-`;
-TodoItem.propTypes = {
-  id: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
-  completed: PropTypes.bool.isRequired,
 };
 
 export default TodoItem;

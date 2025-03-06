@@ -1,139 +1,68 @@
-import { useQuery } from "@tanstack/react-query";
-import { FileCheck, LaptopMinimal, Video } from "lucide-react";
-import styled from "styled-components";
-import { Link, useSearchParams } from "react-router";
-import { getTodos } from "../api/todo-api";
+import { ClipboardCheck, LaptopMinimal, Video } from "lucide-react";
+import { Link } from "react-router";
+import { useFilterParams } from "../../hooks/useFilterParams";
+import { useTodoQuery } from "../../hooks/useTodoQuery";
 
-const TodoDashboard = () => {
-  const [searchParams] = useSearchParams();
-  const selectedFilter = searchParams.get("filter") || "all";
+export const TodoDashboard = () => {
+  const selectedFilter = useFilterParams();
 
-  const {
-    data: todos,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["todos"],
-    queryFn: getTodos,
-  });
-
-  const getFilteredTodos = (filter) => {
-    if (!todos) return [];
-
-    if (filter === "completed") {
-      return todos.filter((todo) => todo.completed);
-    }
-
-    if (filter === "pending") {
-      return todos.filter((todo) => !todo.completed);
-    }
-    return todos;
-  };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div> Error fetching todos - {error} </div>;
-  }
-
-  const all = getFilteredTodos().length;
-  const completed = getFilteredTodos("completed").length;
-  const pending = all - completed;
+  const { data: all } = useTodoQuery();
+  const { data: completed } = useTodoQuery("completed");
+  const { data: pending } = useTodoQuery("pending");
 
   return (
-    <TodoDashboardSection>
-      <TodoDashboardHeader>Quick Access</TodoDashboardHeader>
-
-      <TodoDashboardCardList>
-        <TodoDashboardCardWrapper $flex={2}>
-          <TodoDashboardCard to="/" $selected={selectedFilter === "all"}>
+    <section className="flex flex-col gap-4">
+      <h2 className="font-bold text-2xl">Quick Access</h2>
+      <ul className="flex flex-row flex-wrap gap-4">
+        <li className="flex-[2]">
+          <Link
+            to="/"
+            className={`flex flex-col w-full h-[184px] bg-[#e6582b] justify-between text-white p-5 rounded-2xl cursor-pointer ${
+              !selectedFilter && "underline"
+            }`}
+          >
             <div>
-              <FileCheck />
+              <ClipboardCheck />
             </div>
-            <TodoDashboardCardContent>
-              {all} <br /> <span>All Tasks</span>
-            </TodoDashboardCardContent>
-          </TodoDashboardCard>
-        </TodoDashboardCardWrapper>
-        <TodoDashboardCardWrapper $flex={1}>
-          <TodoDashboardCard
+            <p className="font-semibold text-xl">
+              {all?.length} <br /> <span>All Tasks</span>
+            </p>
+          </Link>
+        </li>
+        <li className="flex-1">
+          <Link
             to="?filter=completed"
-            $bgColor="#592be6"
-            $selected={selectedFilter === "completed"}
+            className={`flex flex-col w-full h-[184px] bg-[#582be6] justify-between text-white p-5 rounded-2xl cursor-pointer ${
+              !selectedFilter === "completed" && "underline"
+            }`}
           >
             <div>
               <LaptopMinimal />
             </div>
-            <TodoDashboardCardContent>
-              {completed} <br /> <span>Completed Tasks</span>
-            </TodoDashboardCardContent>
-          </TodoDashboardCard>
-        </TodoDashboardCardWrapper>
-        <TodoDashboardCardWrapper $flex={1}>
-          <TodoDashboardCard
+            <p className="font-semibold text-xl">
+              {completed?.length}
+              <br /> <span> Completed Tasks</span>
+            </p>
+          </Link>
+        </li>
+        <li className="flex-1">
+          <Link
             to="?filter=pending"
-            $bgColor="#242424"
-            $selected={selectedFilter === "pending"}
+            className={`flex flex-col w-full h-[184px] bg-[#242424] justify-between text-white p-5 rounded-2xl cursor-pointer ${
+              !selectedFilter === "pending" && "underline"
+            }`}
           >
             <div>
               <Video />
             </div>
-            <TodoDashboardCardContent>
-              {pending} <br /> <span>Todo Tasks</span>
-            </TodoDashboardCardContent>
-          </TodoDashboardCard>
-        </TodoDashboardCardWrapper>
-      </TodoDashboardCardList>
-    </TodoDashboardSection>
+            <p className="font-semibold text-xl">
+              {pending?.length} <br /> <span> Pending Tasks</span>
+            </p>
+          </Link>
+        </li>
+      </ul>
+    </section>
   );
 };
-
-const TodoDashboardSection = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
-
-const TodoDashboardHeader = styled.h2`
-  font-size: 1.5rem;
-  font-weight: bold;
-`;
-
-const TodoDashboardCardList = styled.ul`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 1rem;
-`;
-
-const TodoDashboardCardWrapper = styled.li`
-  flex: ${({ $flex = 1 }) => $flex};
-`;
-
-const TodoDashboardCard = styled(Link)`
-  display: flex;
-  flex-direction: column;
-  height: 184px;
-  width: 100%;
-  background-color: ${({ $bgColor = "#e6582b" }) => $bgColor};
-  justify-content: space-between;
-  color: white;
-  padding: 1.25rem;
-  border-radius: 1rem;
-  cursor: pointer;
-  text-decoration: ${({ $selected }) => ($selected ? "underline" : "none")};
-`;
-
-const TodoDashboardCardContent = styled.p`
-  font-size: 1.2rem;
-  font-weight: 600;
-
-  span {
-    font-size: 0.8rem;
-    font-weight: 400;
-  }
-`;
 
 export default TodoDashboard;
