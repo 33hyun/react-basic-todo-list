@@ -5,6 +5,7 @@ import { useThemeStore } from "./hooks/useThemeStore";
 import { useEffect } from "react";
 import RootLayout from "./components/layout/RootLayout";
 import QueryProvider from "./components/provider/QueryProvider";
+import { ToastContainer } from "./components/ui/ToastContainer"; 
 
 export const App = () => {
   const { theme } = useThemeStore();
@@ -12,10 +13,10 @@ export const App = () => {
   useEffect(() => {
     const root = document.documentElement;
 
-    //현재 테마 초기화
+    // 현재 테마 초기화
     root.classList.remove("dark", "light");
 
-    //테마 설정
+    // 테마 설정
     root.classList.add(theme);
   }, [theme]);
 
@@ -28,6 +29,8 @@ export const App = () => {
             <Route path="todos/:id" element={<TodoDetailPage />} />
           </Route>
         </Routes>
+
+        <ToastContainer />
       </QueryProvider>
     </BrowserRouter>
   );
